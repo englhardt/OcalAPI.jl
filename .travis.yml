@@ -1,0 +1,23 @@
+language: julia
+os:
+  - linux
+julia:
+  - 0.6
+notifications:
+  email: false
+addons:
+    apt_packages:
+        - gfortran
+        - hdf5-tools
+script:
+    - cd ..
+    - git clone https://github.com/englhardt/SVDD.jl.git && cd SVDD.jl
+    - julia -e 'Pkg.clone(pwd())'
+    - cd ..
+    - git clone https://github.com/englhardt/OneClassActiveLearning.jl.git && cd OneClassActiveLearning.jl
+    - julia -e 'Pkg.clone(pwd())'
+    - cd ../OcalAPI.jl
+    - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+    - julia -e 'Pkg.clone(pwd()); Pkg.build("OcalAPI.jl"); Pkg.test("OcalAPI.jl"; coverage=true)';
+after_success:
+  - julia -e 'cd(Pkg.dir("OcalAPI")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';

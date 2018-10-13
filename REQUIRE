@@ -1,0 +1,9 @@
+julia 0.6
+SVDD
+OneClassActiveLearning
+HTTP
+JSON
+CodecZlib
+Ipopt
+MLLabelUtils
+MLKernels
