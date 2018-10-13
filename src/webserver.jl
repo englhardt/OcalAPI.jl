@@ -1,6 +1,6 @@
 
-function start_webserver()
-    HTTP.listen() do request::HTTP.Request
+function start_webserver(host=SERVER_HOST, port=SERVER_PORT)
+    HTTP.listen(host, port) do request::HTTP.Request
         try
             # check and parse raw http request
             check_content_type(request)

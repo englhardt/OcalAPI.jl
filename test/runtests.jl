@@ -2,7 +2,7 @@ using OcalAPI
 using CodecZlib
 using Base.Test
 
-SERVER_URI = "http://127.0.0.1:8081"
+SERVER_URI = "http://$(SERVER_HOST):$(SERVER_PORT)"
 
 srand(0)
 
