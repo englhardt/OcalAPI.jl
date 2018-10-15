@@ -1,4 +1,25 @@
 
+DEFAULT_HEADERS = ["ALLOW" => "POST, OPTIONS",
+                   "accept" => "application/json",
+                   "Content-Type" => "application/json",
+                   "Content-Encoding" => "gzip",
+                   "Access-Control-Allow-Origin" => "*",
+                   "Access-Control-Allow-Methods" => "POST, OPTIONS",
+                   "Access-Control-Allow-Headers" => "*",
+                   "Accept-Encoding" => "text/plain", "gzip"]
+
+function handle_http_request_method(request::HTTP.Request)
+    request_method = getfield(request, :method)
+    if request_method == "POST"
+        return nothing
+    elseif request_method == "OPTIONS"
+        return HTTP.Response(200, DEFAULT_HEADERS)
+    else
+        return HTTP.Response(400, DEFAULT_HEADERS)
+    end
+    return nothing
+end
+
 function check_content_type(request::HTTP.Request)
     content_type = HTTP.header(request, "Content-Type")
     if content_type != "application/json"
@@ -30,7 +51,6 @@ function parse_content_body(request::HTTP.Request)
 end
 
 function build_response(status, params)
-    return HTTP.Response(status,
-                         ["Content-Type" => "application/json", "Content-Encoding" => "gzip"];
+    return HTTP.Response(status, DEFAULT_HEADERS;
                          body=transcode(GzipCompressor, JSON.json(Dict(:status => status, params...))))
 end

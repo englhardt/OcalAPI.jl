@@ -3,7 +3,10 @@ function train_model(data, pools, model_type, model_C, model_gamma)
     model = instantiate(eval(Symbol(model_type)), data, pools, Dict{Symbol, Any}())
     initialize!(model, FixedParameterInitialization(MLKernels.GaussianKernel(model_gamma), model_C))
     set_adjust_K!(model, true)
-    fit!(model, DEFAULT_SOLVER)
+    status = fit!(model, DEFAULT_SOLVER)
+    if status != :Optimal
+        throw(ArgumentError("Cannot fit model due to solver error: '$(status)')."))
+    end
     return model
 end
 

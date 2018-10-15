@@ -2,6 +2,10 @@
 function start_webserver(host=SERVER_HOST, port=SERVER_PORT)
     HTTP.listen(host, port) do request::HTTP.Request
         try
+            response = handle_http_request_method(request)
+            if response != nothing
+                return response
+            end
             # check and parse raw http request
             check_content_type(request)
             r = parse_content_body(request)
