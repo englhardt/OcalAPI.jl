@@ -35,6 +35,8 @@ The API documentation is then available at http://localhost:8080 and the API its
 
 ## Overview
 This API wraps one active-learning cycle in a single JSON request.
+![Overview](example/overview.png)
+
 The input consists of the following elements:
 - `data`: An array of `n` observations with `d` dimensions each. Format: `[[x_1_1, ..., x_1_d], ... [x_n_1, ..., x_n_d]]`
 - `labels`: An array of `n` labels with values in `{"U", "Lin", "Lout"}`. Format: `["U", ....]`
@@ -44,7 +46,7 @@ The input consists of the following elements:
   - `classifier`: The classifier to train (see list bellow), e.g., `SVDDneg`
   - `query_strategy`: The query strategy to use for selecting the query object (see list bellow), e.g., `RandomQs`
 - `query_history`: An array of arrays containing the indices of the observations labeled in the last `k` iterations. Example with 2 labeled observation in 3 iterations: `[[1, 2], [4, 7], [8, 10]]`
-- `subspaces`:
+- `subspaces`: An array with subspaces defined with an array of indices (starting with index 1), e.g., `[[2, 3], [4, 5], [3, 5]]` for three 2D subspaces.
 - `subspace_grids`: An array per subspace containing observations to score. Format for each `data_subspaceX` is the same as for `data`. Then, the full format for `subspace_grids` with `S` subspaces is `[data_subspace1, ..., data_subspaceS]`
 
 The API then fits a global model on `data` with the specified `classifier`.
