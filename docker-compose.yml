@@ -1,0 +1,14 @@
+version: '3'
+services:
+  ocal-api:
+    image: "aengl/ocal-api"
+    ports:
+      - "8081:8081"
+  swagger-ui:
+    image: "swaggerapi/swagger-ui"
+    volumes:
+      - .:/app
+    environment:
+      SWAGGER_JSON: /app/swagger.json
+    ports:
+        - "8080:8080"
