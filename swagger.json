@@ -1,0 +1,243 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "url" : "http://localhost:8081"
+  } ],
+  "info" : {
+    "description" : "A JSON REST API for one-class active learning. The API is open source: [https://github.com/englhardt/OcalAPI.jl](https://github.com/englhardt/OcalAPI.jl)",
+    "version" : "1.0.0",
+    "title" : "OcalAPI.jl",
+    "contact" : {
+      "email" : "adrian.englhardt@gmail.com"
+    },
+    "license" : {
+      "name" : "MIT 'Expat' License",
+      "url" : "https://github.com/englhardt/OcalAPI.jl/blob/master/LICENSE.md"
+    }
+  },
+  "tags" : [ {
+    "name" : "Ocal",
+    "description" : "One-class active learning"
+  } ],
+  "paths" : {
+    "/" : {
+      "post" : {
+        "tags" : [ "Ocal" ],
+        "summary" : "Run one-class active learning",
+        "operationId" : "ocal",
+        "responses" : {
+          "200" : {
+            "description" : "Success.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ValidOcalResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Argument error.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/400ErrorOcalResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Unknown internal error.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/500ErrorOcalResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/OcalRequest"
+              }
+            }
+          },
+          "description" : "Parameters to process.",
+          "required" : true
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "OcalRequest" : {
+        "type" : "object",
+        "required" : [ "data", "labels", "params", "query_history", "subspaces", "subspace_grids" ],
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "type" : "number",
+                "format" : "float"
+              }
+            },
+            "example" : [ [ 0.5, 0.8 ], [ 0.9, 0.7 ], [ 0.3, 0.5 ] ]
+          },
+          "labels" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "U", "Lin", "Lout" ]
+            },
+            "example" : [ "U", "Lin", "Lout" ]
+          },
+          "params" : {
+            "type" : "object",
+            "properties" : {
+              "C" : {
+                "type" : "number",
+                "format" : "float",
+                "minimum" : 0,
+                "maximum" : 1,
+                "example" : 0.05
+              },
+              "gamma" : {
+                "type" : "number",
+                "format" : "float",
+                "minimum" : 0,
+                "example" : 2
+              },
+              "classifier" : {
+                "type" : "string",
+                "enum" : [ "VanillaSVDD", "SVDDneg", "SSAD" ],
+                "example" : "SVDDneg"
+              },
+              "query_strategy" : {
+                "type" : "string",
+                "enum" : [ "RandomQs", "MinimumMarginQs", "ExpectedMinimumMarginQs", "ExpectedMaximumEntropyQs", "MinimumLossQs", "RandomOutlierQs", "HighConfidenceQs", "DecisionBoundaryQs", "NeighborhoodBasedQs", "BoundaryNeighborCombinationQs" ],
+                "example" : "RandomQs"
+              }
+            }
+          },
+          "query_history" : {
+            "type" : "array",
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer",
+                "minimum" : 1
+              }
+            },
+            "example" : [ [ 2 ], [ 3 ] ]
+          },
+          "subspaces" : {
+            "type" : "array",
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer",
+                "minimum" : 1
+              }
+            },
+            "example" : [ [ 1, 2 ] ]
+          },
+          "subspace_grids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "number",
+                  "format" : "float"
+                }
+              }
+            },
+            "example" : [ [ [ 0, 1 ], [ 1, 0 ] ] ]
+          }
+        }
+      },
+      "ValidOcalResponse" : {
+        "type" : "object",
+        "properties" : {
+          "prediction_global" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "inlier", "outlier" ]
+            },
+            "example" : [ "inlier", "inlier", "outlier" ]
+          },
+          "prediction_subspaces" : {
+            "type" : "array",
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "enum" : [ "inlier", "outlier" ]
+              }
+            },
+            "example" : [ [ "inlier", "inlier", "outlier" ] ]
+          },
+          "score_subspace_grids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "type" : "number",
+                "format" : "float"
+              }
+            },
+            "example" : [ [ 0.1, -0.5 ] ]
+          },
+          "query_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "minimum" : 1,
+              "example" : [ 1 ]
+            }
+          },
+          "ranking_subspaces" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
+            "example" : [ 1 ]
+          }
+        }
+      },
+      "400ErrorOcalResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer",
+            "enum" : [ 400 ]
+          },
+          "error" : {
+            "type" : "string",
+            "example" : "Cannot parse JSON."
+          }
+        }
+      },
+      "500ErrorOcalResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer",
+            "enum" : [ 500 ]
+          },
+          "error" : {
+            "type" : "string",
+            "example" : "Unknown error (...)."
+          }
+        }
+      }
+    }
+  }
+}
