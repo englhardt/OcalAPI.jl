@@ -13,13 +13,13 @@ We recommend running the API with the provided Docker container:
 
 ```
 docker pull aengl/ocal-api
-docker run -it ocal-api
+docker run -it aengl/ocal-api
 ```
 
 The API is then available at http://localhost:8081.
 To bind to a specific `HOST` and `PORT`, pass additional environment variables:
 ```
-docker run -e OCAL_API_HOST=HOST -e OCAL_API_PORT=PORT -p PORT:PORT -it ocal-api
+docker run -e OCAL_API_HOST=HOST -e OCAL_API_PORT=PORT -p PORT:PORT -it aengl/ocal-api
 ```
 
 Our API documentation based on [Swagger](https://swagger.io/).
