@@ -668,7 +668,7 @@
   ],
   "params":{
     "classifier":"SVDDneg",
-    "query_strategy":"RandomQs",
+    "query_strategy":"RandomPQs",
     "C":0.05,
     "gamma":2
   }

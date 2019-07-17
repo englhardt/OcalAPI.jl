@@ -1,7 +1,9 @@
 
 function start_webserver(host=SERVER_HOST, port=SERVER_PORT)
-    HTTP.listen(host, port) do request::HTTP.Request
+    @info "Listening on $SERVER_HOST:$SERVER_PORT"
+    HTTP.serve(host, port) do request::HTTP.Request
         try
+            @debug "Processing request."
             response = handle_http_request_method(request)
             if response != nothing
                 return response

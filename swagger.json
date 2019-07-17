@@ -104,7 +104,7 @@
                 "format" : "float",
                 "minimum" : 0,
                 "maximum" : 1,
-                "example" : 0.05
+                "example" : 0.5
               },
               "gamma" : {
                 "type" : "number",
@@ -119,8 +119,8 @@
               },
               "query_strategy" : {
                 "type" : "string",
-                "enum" : [ "RandomQs", "MinimumMarginQs", "ExpectedMinimumMarginQs", "ExpectedMaximumEntropyQs", "MinimumLossQs", "RandomOutlierQs", "HighConfidenceQs", "DecisionBoundaryQs", "NeighborhoodBasedQs", "BoundaryNeighborCombinationQs" ],
-                "example" : "RandomQs"
+                "enum" : [ "RandomPQs", "MinimumMarginPQs", "ExpectedMinimumMarginPQs", "ExpectedMaximumEntropyPQs", "MinimumLossPQs", "RandomOutlierPQs", "HighConfidencePQs", "DecisionBoundaryPQs", "NeighborhoodBasedPQs", "BoundaryNeighborCombinationPQs" ],
+                "example" : "RandomPQs"
               }
             }
           },

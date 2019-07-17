@@ -10,11 +10,9 @@ DEFAULT_HEADERS = ["ALLOW" => "POST, OPTIONS",
 
 function handle_http_request_method(request::HTTP.Request)
     request_method = getfield(request, :method)
-    if request_method == "POST"
-        return nothing
-    elseif request_method == "OPTIONS"
+    if request_method == "OPTIONS"
         return HTTP.Response(200, DEFAULT_HEADERS)
-    else
+    elseif request_method != "POST"
         return HTTP.Response(400, DEFAULT_HEADERS)
     end
     return nothing

@@ -1,15 +1,20 @@
 module OcalAPI
 
-using HTTP
-using JSON
 using CodecZlib
+using HTTP
 using Ipopt
-using SVDD
-using OneClassActiveLearning
+using JSON
+using JuMP
+using Logging
 using MLLabelUtils
 using MLKernels
+using OneClassActiveLearning
+using Random
+using Sockets
+using SVDD
 
-DEFAULT_SOLVER = IpoptSolver(print_level=0)
+
+DEFAULT_SOLVER = with_optimizer(Ipopt.Optimizer, print_level=0)
 SERVER_HOST = "OCAL_API_HOST" in keys(ENV) ? ENV["OCAL_API_HOST"] : ip"0.0.0.0"
 SERVER_PORT = "OCAL_API_PORT" in keys(ENV) ? parse(Int, ENV["OCAL_API_PORT"]) : 8081
 

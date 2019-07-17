@@ -4,7 +4,7 @@ function train_model(data, pools, model_type, model_C, model_gamma)
     initialize!(model, FixedParameterInitialization(MLKernels.GaussianKernel(model_gamma), model_C))
     set_adjust_K!(model, true)
     status = fit!(model, DEFAULT_SOLVER)
-    if status != :Optimal
+    if status ∉ [JuMP.MathOptInterface.OPTIMAL, JuMP.MathOptInterface.LOCALLY_SOLVED, JuMP.MathOptInterface.ALMOST_LOCALLY_SOLVED]
         throw(ArgumentError("Cannot fit model due to solver error: '$(status)')."))
     end
     return model
@@ -20,7 +20,7 @@ function run_query_strategy(data, pools, model, qs_type, query_history)
     scores = qs_score(qs, data, pool_map)
     @assert length(scores) == size(data, 2)
     candidates = [i for i in pool_map[:U] if i ∉ query_history]
-    return [indmax(scores[candidates])]
+    return [argmax(scores[candidates])]
 end
 
 function run_ocal(r)
