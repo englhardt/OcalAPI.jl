@@ -22,10 +22,17 @@ function check_keys(r)
     return nothing
 end
 
-
 function convert_value!(r, name, target_type, func=identity)
     try
         r[name] = func(convert(target_type, r[name]))
+    catch e
+        throw(ArgumentError("Failed parsing '$(name)': $(r[name])."))
+    end
+end
+
+function convert_value!(r, name, target_type::Type{Vector{Symbol}}, func=identity)
+    try
+        r[name] = func([Symbol.(x) for x in r[name]])
     catch e
         throw(ArgumentError("Failed parsing '$(name)': $(r[name])."))
     end
